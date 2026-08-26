@@ -1,20 +1,14 @@
-"""Resident Model
-
-The Resident domain model will be implemented in CSMS-201.
-"""
-
 # The class for the model---------------------------------
 class Resident:
-    def __init__( # setup func
+    def __init__(
         self,
-        # parameters 
-        id: int,
-        first_name: str,
-        last_name: str,
-        address: str,
-        contact_number: str,
-        email: str,
-        status: str = "Active"
+        first_name,
+        last_name,
+        address,
+        contact_number,
+        email,
+        status="Active",
+        id=None,
     ):
         # Save each information piece onto the object so it can be accessed later.
         self.id = id
