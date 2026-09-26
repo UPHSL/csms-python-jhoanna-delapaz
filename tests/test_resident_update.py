@@ -10,6 +10,7 @@ from src.csms.services.resident_validator import ResidentValidator
 from src.csms.services.resident_update_service import ResidentUpdateService
 from src.csms.services.resident_query_service import ResidentQueryService
 
+# Helper Functions ---
 
 @pytest.fixture
 def repository(tmp_path) -> ResidentRepository:
@@ -32,8 +33,10 @@ def query_service(repository: ResidentRepository) -> ResidentQueryService:
     return ResidentQueryService(repository)
 
 
-def test_1_valid_resident_update_succeeds(repository, update_service):
-    """Test 1: Valid Resident Update Succeeds."""
+# 10 Required Tests ---
+
+def test_valid_resident_update_succeeds(repository, update_service):
+    # Test 1: Valid Resident Update Succeeds.
     saved = repository.save(
         Resident(
             first_name="Juan",
@@ -58,8 +61,8 @@ def test_1_valid_resident_update_succeeds(repository, update_service):
     assert result.resident.first_name == "Juan Miguel"
 
 
-def test_2_resident_id_is_preserved(repository, update_service):
-    """Test 2: Resident ID Is Preserved."""
+def test_resident_id_is_preserved(repository, update_service):
+    # Test 2: Resident ID Is Preserved.
     saved = repository.save(
         Resident(
             first_name="Maria",
@@ -83,8 +86,8 @@ def test_2_resident_id_is_preserved(repository, update_service):
     assert result.resident.id == saved.id
 
 
-def test_3_permitted_resident_information_is_persisted(repository, update_service):
-    """Test 3: Permitted Resident Information Is Persisted."""
+def test_permitted_resident_information_is_persisted(repository, update_service):
+    # Test 3: Permitted Resident Information Is Persisted.
     saved = repository.save(
         Resident(
             first_name="Ana",
@@ -112,8 +115,8 @@ def test_3_permitted_resident_information_is_persisted(repository, update_servic
     assert updated_db.email == "ana.new@example.com"
 
 
-def test_4_resident_status_is_preserved(repository, update_service):
-    """Test 4: Resident Status Is Preserved (both Active and Inactive)."""
+def test_resident_status_is_preserved(repository, update_service):
+    # Test 4: Resident Status Is Preserved (both Active and Inactive).
     inactive_resident = Resident(
         first_name="Jose",
         last_name="Rizal",
@@ -138,8 +141,8 @@ def test_4_resident_status_is_preserved(repository, update_service):
     assert repository.find_by_id(saved.id).status == "Inactive"
 
 
-def test_5_invalid_update_fails(repository, update_service):
-    """Test 5: Invalid Update Fails."""
+def test_invalid_update_fails(repository, update_service):
+    # Test 5: Invalid Update Fails
     saved = repository.save(
         Resident(
             first_name="Pedro",
@@ -164,10 +167,10 @@ def test_5_invalid_update_fails(repository, update_service):
     assert "first_name" in result.errors
 
 
-def test_6_invalid_update_does_not_modify_persisted_information(
+def test_invalid_update_does_not_modify_persisted_information(
     repository, update_service
 ):
-    """Test 6: Invalid Update Does Not Modify Persisted Information."""
+    # Test 6: Invalid Update Does Not Modify Persisted Information.
     saved = repository.save(
         Resident(
             first_name="Original",
@@ -194,8 +197,8 @@ def test_6_invalid_update_does_not_modify_persisted_information(
     assert db_resident.contact_number == "09171234567"
 
 
-def test_7_updating_a_nonexistent_resident_is_handled_safely(update_service):
-    """Test 7: Updating a Nonexistent Resident Is Handled Safely."""
+def test_updating_a_nonexistent_resident_is_handled_safely(update_service):
+    # Test 7: Updating a Nonexistent Resident Is Handled Safely.
     result = update_service.update_resident(
         resident_id=999999,
         first_name="Ghost",
@@ -210,10 +213,10 @@ def test_7_updating_a_nonexistent_resident_is_handled_safely(update_service):
     assert result.resident is None
 
 
-def test_8_nonexistent_update_does_not_create_a_resident(
+def test_nonexistent_update_does_not_create_a_resident(
     repository, update_service
 ):
-    """Test 8: Nonexistent Update Does Not Create a Resident."""
+    # Test 8: Nonexistent Update Does Not Create a Resident.
     initial_count = len(repository.find_all())
 
     update_service.update_resident(
@@ -231,7 +234,7 @@ def test_8_nonexistent_update_does_not_create_a_resident(
 def test_9_updated_resident_is_visible_through_t05_querying(
     repository, update_service, query_service
 ):
-    """Test 9: Updated Resident Is Visible Through T05 Querying."""
+    # Test 9: Updated Resident Is Visible Through T05 Querying.
     saved = repository.save(
         Resident(
             first_name="OldFirstName",
@@ -257,10 +260,10 @@ def test_9_updated_resident_is_visible_through_t05_querying(
     assert search_results[0].first_name == "NewUniqueFirst"
 
 
-def test_10_updated_information_and_contact_number_are_preserved(
+def test_updated_information_and_contact_number_are_preserved(
     repository, update_service
 ):
-    """Test 10: Contact Number Retains Leading Zero and Fields Preserved."""
+    # Test 10: Contact Number Retains Leading Zero and Fields Preserved.
     saved = repository.save(
         Resident(
             first_name="Zero",
