@@ -142,9 +142,9 @@ def test_persistence_across_multiple_repository_instances(tmp_path):
 
 
 def test_sequential_residents_get_unique_ids(repo):
-    """Student-Designed Test: Verify storing multiple residents back to back generates unique, sequential IDs.
-    Ensures adding new residents gives them unique IDs so they don't overwrite existing ones or crash.
-    """
+    # Student-Designed Test: Verify storing multiple residents back to back generates unique, sequential IDs.
+    # Ensures adding new residents gives them unique IDs so they don't overwrite existing ones or crash.
+    
     resident1 = Resident(
         first_name="Waffles",
         last_name="Corgi",
