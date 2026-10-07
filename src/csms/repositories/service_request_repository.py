@@ -104,3 +104,21 @@ class ServiceRequestRepository:
             date_requested=parsed_date,
             status=row["status"],
         )
+
+    # T10: updates only the status field of a persisted Service Request
+    def update_status(self, request_id: int, new_status: str) -> None:
+        """updates the status column in SQLite using parameterized query"""
+        conn = self._get_connection()
+        cursor = conn.cursor()
+
+        cursor.execute(
+            """
+            UPDATE service_requests
+            SET status = ?
+            WHERE id = ?
+            """,
+            (new_status, request_id),
+        )
+
+        conn.commit()
+        conn.close()
