@@ -5,16 +5,16 @@ Complete this file during Sprint 0.
 ## Student Information
 
 **Full Name:**  
-`Enter your full name`
+`Jhoanna Alexandra C. De La Paz`
 
 **Student Number:**  
-`Enter your student number`
+`c23-1610-534`
 
 **Section:**  
-`Enter your section`
+`J4A`
 
 **GitHub Username:**  
-`Enter your GitHub username`
+`jhoanna-delapaz`
 
 **Primary Technology Stack:**  
 Python with Flask
@@ -23,27 +23,27 @@ Python with Flask
 
 Briefly describe your current programming experience.
 
-`Write your answer here.`
+`My experience consists of learning the basics of several programming languages (Python, PHP, and Java) throughout my academic years in senior high school and college, and being able to build a few minor projects of my own. However I currently lack the time and practice to further learn advanced concepts of the programming languages I currently use and curious about.`
 
 ## Learning Goal
 
 What do you want to learn or improve during this course?
 
-`Write your answer here.`
+`In this course, I express my wants of choosing to master a common programming langauage I have comfortably used since 1st year of college, which is Python. I want to use my time in this course to further improve my programming skills through consistent practice and hands-on activities.`
 
 ## Development Environment
 
 **Operating System:**  
-`Enter your operating system`
+`Microsoft Windows 11 Pro`
 
 **Python Version:**  
-`Enter the output of python --version`
+`Python 3.14.7`
 
 **VS Code Installed:**  
-`Yes or No`
+`Yes`
 
 ## Academic Integrity Confirmation
 
-- [ ] I completed this profile using my own information.
-- [ ] I understand that I must be able to explain all work I submit.
-- [ ] I will disclose outside and AI assistance when required.
+- [x] I completed this profile using my own information.
+- [x] I understand that I must be able to explain all work I submit.
+- [x] I will disclose outside and AI assistance when required.

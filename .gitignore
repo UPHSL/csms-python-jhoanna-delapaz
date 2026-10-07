@@ -34,3 +34,8 @@ instance/
 
 # Logs
 *.log
+
+# SQLite databases
+*.db
+*.sqlite
+*.sqlite3
