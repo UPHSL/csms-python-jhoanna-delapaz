@@ -41,6 +41,18 @@ class ServiceRequestRepository:
         conn.commit()
         conn.close()
 
+    # T11: Helper method to map SQLite rows to ServiceRequest instances cleanly
+    def _map_row_to_service_request(self, row: sqlite3.Row) -> ServiceRequest:
+        parsed_date = date.fromisoformat(row["date_requested"])
+        return ServiceRequest(
+            id=row["id"],
+            resident_id=row["resident_id"],
+            service_type=row["service_type"],
+            description=row["description"],
+            date_requested=parsed_date,
+            status=row["status"],
+        )
+
     def save(self, service_request: ServiceRequest) -> ServiceRequest:
         """continues a valid Service Request and attaches the auto-generated ID"""
         conn = self._get_connection()
@@ -93,17 +105,7 @@ class ServiceRequestRepository:
         if row is None:
             return None
 
-        # Parse stored date string back into date object
-        parsed_date = date.fromisoformat(row["date_requested"])
-
-        return ServiceRequest(
-            id=row["id"],
-            resident_id=row["resident_id"],
-            service_type=row["service_type"],
-            description=row["description"],
-            date_requested=parsed_date,
-            status=row["status"],
-        )
+        return self._map_row_to_service_request(row)
 
     # T10: updates only the status field of a persisted Service Request
     def update_status(self, request_id: int, new_status: str) -> None:
@@ -122,3 +124,51 @@ class ServiceRequestRepository:
 
         conn.commit()
         conn.close()
+
+    # T11: Persistent listing, partial text search, status filtering, and deterministic ordering
+    def find_all(self) -> list[ServiceRequest]:
+        """Retrieves all service requests ordered by dateRequested DESC, then id DESC."""
+        return self.search(search_term=None, status_filter=None)
+
+    def search(
+        self,
+        search_term: Optional[str] = None,
+        status_filter: Optional[str] = None,
+    ) -> list[ServiceRequest]:
+        """
+        Queries persisted Service Requests with optional partial text matching across 
+        service_type OR description and optional status filtering.
+        Uses parameterized SQL queries and orders results by date_requested DESC, id DESC.
+        """
+        conn = self._get_connection()
+        cursor = conn.cursor()
+
+        query = """
+            SELECT id, resident_id, service_type, description, date_requested, status
+            FROM service_requests
+        """
+        conditions = []
+        params = []
+
+        # Text search matching serviceType OR description (case-insensitive partial match via LIKE)
+        if search_term:
+            conditions.append("(service_type LIKE ? OR description LIKE ?)")
+            wildcard_term = f"%{search_term}%"
+            params.extend([wildcard_term, wildcard_term])
+
+        # Filter by specific status
+        if status_filter:
+            conditions.append("status = ?")
+            params.append(status_filter)
+
+        if conditions:
+            query += " WHERE " + " AND ".join(conditions)
+
+        # Required ordering: dateRequested DESC, then id DESC
+        query += " ORDER BY date_requested DESC, id DESC"
+
+        cursor.execute(query, params)
+        rows = cursor.fetchall()
+        conn.close()
+
+        return [self._map_row_to_service_request(row) for row in rows]
