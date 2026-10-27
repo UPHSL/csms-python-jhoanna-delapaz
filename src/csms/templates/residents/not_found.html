@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resident Not Found</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <main class="container">
+        <section class="card" style="text-align: center;">
+            <h1 style="color: #dc2626;">404 - Not Found</h1>
+            <p class="message">{{ message or 'The requested Resident could not be found.' }}</p>
+            <div style="margin-top: 2rem;">
+                <a href="{{ url_for('main.list_residents') }}" class="btn btn-primary" style="text-decoration: none; padding: 0.5rem 1.5rem;">Return to Resident Management</a>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
