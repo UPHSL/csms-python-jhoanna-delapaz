@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Service Request</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=1">
+</head>
+<body>
+    <main class="container">
+        <!-- T13: Service Request Submission Form -->
+        <section class="card" style="max-width: 600px;">
+            <h1>Submit Service Request</h1>
+
+            <!-- Global Error Feedback -->
+            {% if global_error %}
+                <div class="alert alert-error" style="margin-top: 1rem; margin-bottom: 1rem;">
+                    {{ global_error }}
+                </div>
+            {% endif %}
+
+            {% if errors %}
+                <div class="alert alert-error" style="margin-top: 1rem; margin-bottom: 1rem;">
+                    Please correct the errors below before submitting.
+                </div>
+            {% endif %}
+
+            <form method="POST" action="{{ url_for('main.submit_service_request') }}" style="display: grid; gap: 1.25rem; margin-top: 1.5rem;">
+                
+                <!-- Resident ID -->
+                <div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+                        <label for="resident_id" style="display: block; font-weight: 600;">Resident ID</label>
+                        <a href="{{ url_for('main.list_residents') }}" target="_blank" style="font-size: 0.85rem; color: #2563eb; text-decoration: none;">View Residents &rarr;</a>
+                    </div>
+                    <input type="number" id="resident_id" name="resident_id" value="{{ form_data.get('resident_id', '') }}" 
+                           placeholder="e.g. 1"
+                           style="width: 100%; padding: 0.6rem; border: 1px solid {% if 'resident_id' in errors or 'resident_id' in errors|map(attribute='field')|list %}#dc2626{% else %}#d1d5db{% endif %}; border-radius: 0.5rem; outline: none;">
+                    
+                    {% if 'resident_id' in errors or 'resident_id' in errors|map(attribute='field')|list %}
+                        <small style="color: #dc2626; font-size: 0.85rem; margin-top: 0.25rem; display: block; font-weight: 600;">
+                            {% if not form_data.get('resident_id') %}Resident ID is required.{% else %}Invalid Resident ID format.{% endif %}
+                        </small>
+                    {% endif %}
+                </div>
+
+                <!-- Service Type -->
+                <div>
+                    <label for="service_type" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Service Type</label>
+                    <input type="text" id="service_type" name="service_type" value="{{ form_data.get('service_type', '') }}" 
+                           placeholder="e.g. Barangay Clearance"
+                           style="width: 100%; padding: 0.6rem; border: 1px solid {% if 'service_type' in errors or 'service_type' in errors|map(attribute='field')|list %}#dc2626{% else %}#d1d5db{% endif %}; border-radius: 0.5rem; outline: none;">
+                    
+                    {% if 'service_type' in errors or 'service_type' in errors|map(attribute='field')|list %}
+                        <small style="color: #dc2626; font-size: 0.85rem; margin-top: 0.25rem; display: block; font-weight: 600;">
+                            {% if not form_data.get('service_type') %}Service type is required.{% else %}Invalid service type format.{% endif %}
+                        </small>
+                    {% endif %}
+                </div>
+
+                <!-- Description -->
+                <div>
+                    <label for="description" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Description</label>
+                    <textarea id="description" name="description" rows="4" 
+                              placeholder="Describe the requested service in detail..."
+                              style="width: 100%; padding: 0.6rem; border: 1px solid {% if 'description' in errors or 'description' in errors|map(attribute='field')|list %}#dc2626{% else %}#d1d5db{% endif %}; border-radius: 0.5rem; outline: none; font-family: inherit;">{{ form_data.get('description', '') }}</textarea>
+                    
+                    {% if 'description' in errors or 'description' in errors|map(attribute='field')|list %}
+                        <small style="color: #dc2626; font-size: 0.85rem; margin-top: 0.25rem; display: block; font-weight: 600;">
+                            {% if not form_data.get('description') %}Description is required.{% else %}Invalid description format.{% endif %}
+                        </small>
+                    {% endif %}
+                </div>
+
+                <!-- Date Requested -->
+                <div>
+                    <label for="date_requested" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Date Requested</label>
+                    <input type="date" id="date_requested" name="date_requested" value="{{ form_data.get('date_requested', '') }}" 
+                           style="width: 100%; padding: 0.6rem; border: 1px solid {% if 'date_requested' in errors or 'date_requested' in errors|map(attribute='field')|list %}#dc2626{% else %}#d1d5db{% endif %}; border-radius: 0.5rem; outline: none;">
+                    
+                    {% if 'date_requested' in errors or 'date_requested' in errors|map(attribute='field')|list %}
+                        <small style="color: #dc2626; font-size: 0.85rem; margin-top: 0.25rem; display: block; font-weight: 600;">
+                            {% if not form_data.get('date_requested') %}Date requested is required.{% else %}Invalid date format.{% endif %}
+                        </small>
+                    {% endif %}
+                </div>
+
+                <!-- Form Actions -->
+                <div style="display: flex; gap: 1rem; margin-top: 0.5rem;">
+                    <button type="submit" class="btn btn-warning">Submit</button>
+                    <a href="{{ url_for('main.list_service_requests') }}" class="btn btn-outline">Cancel</a>
+                </div>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

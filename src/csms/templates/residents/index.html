@@ -4,15 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resident Management</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=4">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=5">
 </head>
 <body>
+    <!-- Included Shared Navigation -->
+    {% include 'navbar.html' %}
+    
     <main class="container">
         <section class="card-wide">
             <!-- Header Section -->
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                <h1>Resident Management</h1>
-                <a href="{{ url_for('main.register_resident_form') }}" class="btn btn-warning">Register Resident</a>
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+                <h1 style="margin: 0;">Resident Management</h1>
+                <a href="{{ url_for('main.register_resident_form') }}" class="btn btn-warning" style="margin-bottom: 0.25rem;">Register Resident</a>
             </div>
 
             <!-- Flash Notifications -->
@@ -25,8 +28,8 @@
             {% endwith %}
 
             <!-- Search Form -->
-            <form method="GET" action="{{ url_for('main.list_residents') }}" style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
-                <input type="text" name="search" value="{{ search_term }}" placeholder="Search by first or last name..." style="flex: 1; padding: 0.6rem 1rem; border: 1px solid #d1d5db; border-radius: 0.5rem; font-size: 0.95rem;">
+            <form method="GET" action="{{ url_for('main.list_residents') }}" style="display: flex; gap: 0.5rem; margin-bottom: 1rem; align-items: center;">
+                <input type="text" name="search" value="{{ search_term }}" placeholder="Search by first or last name..." class="form-control" style="flex: 1;">
                 <button type="submit" class="btn btn-secondary">Search</button>
                 {% if search_term %}
                     <a href="{{ url_for('main.list_residents') }}" class="btn btn-outline">Clear</a>
@@ -45,7 +48,7 @@
                                 <th>Contact Number</th>
                                 <th>Email</th>
                                 <th style="text-align: center;">Status</th>
-                                <th style="text-align: center;">Actions</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -60,8 +63,8 @@
                                         {% set status_str = resident.status.value if resident.status.value is defined else resident.status | string %}
                                         <span class="badge badge-{{ status_str | lower }}">{{ status_str }}</span>
                                     </td>
-                                    <td style="text-align: center;">
-                                        <div class="action-cell" style="justify-content: center;">
+                                    <td>
+                                        <div class="action-cell">
                                             <a href="{{ url_for('main.edit_resident_form', resident_id=resident.id) }}" class="btn-sm btn-outline">Edit</a>
                                             {% if status_str | lower == 'active' %}
                                                 <form method="POST" action="{{ url_for('main.deactivate_resident_submit', resident_id=resident.id) }}" style="display: inline;">
