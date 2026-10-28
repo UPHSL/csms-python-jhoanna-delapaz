@@ -3,6 +3,7 @@
 from flask import Flask
 
 from csms.config import DevelopmentConfig
+from csms.db.database import init_db
 
 
 def create_app(test_config: dict[str, object] | None = None) -> Flask:
@@ -20,6 +21,10 @@ def create_app(test_config: dict[str, object] | None = None) -> Flask:
 
     if test_config is not None:
         app.config.update(test_config)
+
+    # Initialize database tables if they do not exist
+    database_path = str(app.config.get("DATABASE_PATH", "csms.sqlite"))
+    init_db(database_path)
 
     from csms.ui.routes import main_blueprint
 

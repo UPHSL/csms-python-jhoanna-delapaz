@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Request Management</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=5">
+</head>
+<body>
+    <!-- Included Shared Navigation -->
+    {% include 'navbar.html' %}
+
+    <main class="container">
+        <section class="card-wide">
+            <!-- Header Section -->
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+                <h1 style="margin: 0;">Service Request Management</h1>
+                <a href="{{ url_for('main.new_service_request') }}" class="btn btn-warning" style="margin-bottom: 0.25rem;">Submit Service Request</a>
+            </div>
+
+            <!-- Flash Notifications -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ 'success' if category == 'success' else 'error' }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <!-- Search & Filter Form -->
+            <form method="GET" action="{{ url_for('main.list_service_requests') }}" style="display: flex; gap: 0.5rem; margin-bottom: 1rem; align-items: center; flex-wrap: wrap;">
+                <input type="text" name="search" placeholder="Search service type or description..." value="{{ search_term }}" class="form-control" style="flex: 1; min-width: 200px;">
+                
+                <select name="status" class="form-select">
+                    <option value="" {% if not selected_status %}selected{% endif %}>All Statuses</option>
+                    <option value="Pending" {% if selected_status == 'Pending' %}selected{% endif %}>Pending</option>
+                    <option value="In Progress" {% if selected_status == 'In Progress' %}selected{% endif %}>In Progress</option>
+                    <option value="Completed" {% if selected_status == 'Completed' %}selected{% endif %}>Completed</option>
+                    <option value="Cancelled" {% if selected_status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+                </select>
+
+                <button type="submit" class="btn btn-secondary">Search / Filter</button>
+                {% if search_term or selected_status %}
+                    <a href="{{ url_for('main.list_service_requests') }}" class="btn btn-outline">Clear</a>
+                {% endif %}
+            </form>
+
+            <!-- Service Request Table -->
+            {% if service_requests %}
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Resident ID</th>
+                                <th>Service Type</th>
+                                <th>Date Requested</th>
+                                <th style="text-align: center;">Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for sr in service_requests %}
+                                <tr>
+                                    <td>{{ sr.id }}</td>
+                                    <td>{{ sr.resident_id }}</td>
+                                    <td style="font-weight: 600;">{{ sr.service_type }}</td>
+                                    <td>{{ sr.date_requested }}</td>
+                                    
+                                    <!-- Status Badge -->
+                                    <td style="text-align: center;">
+                                        {% set status_str = sr.status.value if sr.status.value is defined else sr.status | string %}
+                                        {% set badge_class = status_str | lower | replace(' ', '_') %}
+                                        <span class="badge badge-{{ badge_class }}">{{ status_str }}</span>
+                                    </td>
+                                    
+                                    <!-- Action Buttons -->
+                                    <td>
+                                        <div class="action-cell">
+                                            <a href="{{ url_for('main.view_service_request', request_id=sr.id) }}" class="btn-sm btn-outline">View</a>
+
+                                            {% set status_lower = status_str | lower %}
+                                            {% if status_lower == 'pending' %}
+                                                <form method="POST" action="{{ url_for('main.update_service_request_status', request_id=sr.id) }}" style="display: inline;">
+                                                    <input type="hidden" name="action" value="start_processing">
+                                                    <button type="submit" class="btn-sm btn-outline">Start Processing</button>
+                                                </form>
+                                                <form method="POST" action="{{ url_for('main.update_service_request_status', request_id=sr.id) }}" style="display: inline;">
+                                                    <input type="hidden" name="action" value="cancel">
+                                                    <button type="submit" class="btn-sm btn-danger" onclick="return confirm('Are you sure you want to cancel this request?');">Cancel</button>
+                                                </form>
+                                            {% elif status_lower == 'in progress' %}
+                                                <form method="POST" action="{{ url_for('main.update_service_request_status', request_id=sr.id) }}" style="display: inline;">
+                                                    <input type="hidden" name="action" value="complete">
+                                                    <button type="submit" class="btn-sm btn-success">Complete</button>
+                                                </form>
+                                                <form method="POST" action="{{ url_for('main.update_service_request_status', request_id=sr.id) }}" style="display: inline;">
+                                                    <input type="hidden" name="action" value="cancel">
+                                                    <button type="submit" class="btn-sm btn-danger" onclick="return confirm('Are you sure you want to cancel this request?');">Cancel</button>
+                                                </form>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p style="text-align: center; color: #6b7280; padding: 2.5rem 0;">No Service Requests found.</p>
+            {% endif %}
+        </section>
+    </main>
+</body>
+</html>
