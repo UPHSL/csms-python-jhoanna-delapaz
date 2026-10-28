@@ -1,0 +1,28 @@
+<!-- Shared Navigation Bar Partial (Yellow/Amber Theme) -->
+<header style="background-color: #fef08a; border-bottom: 2px solid #fde047; width: 100%; margin-bottom: 0;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0.5rem 1.5rem; display: flex; gap: 1rem; align-items: center;">
+        <span style="color: #713f12; font-weight: 800; font-size: 1.1rem; margin-right: 1rem;">CSMS Portal</span>
+        
+        <a href="{{ url_for('main.list_residents') }}" 
+           style="color: {{ '#713f12' if request.endpoint == 'main.list_residents' else '#854d0e' }}; 
+                  background-color: {{ '#facc15' if request.endpoint == 'main.list_residents' else 'transparent' }}; 
+                  text-decoration: none; padding: 0.35rem 0.8rem; border-radius: 0.375rem; font-weight: 600; transition: all 0.2s;">
+            Residents
+        </a>
+        
+        <a href="{{ url_for('main.list_service_requests') }}" 
+           style="color: {{ '#713f12' if request.endpoint == 'main.list_service_requests' else '#854d0e' }}; 
+                  background-color: {{ '#facc15' if request.endpoint == 'main.list_service_requests' else 'transparent' }}; 
+                  text-decoration: none; padding: 0.35rem 0.8rem; border-radius: 0.375rem; font-weight: 600; transition: all 0.2s;">
+            Service Requests
+        </a>
+    </div>
+</header>
+
+<!-- Tightens the space above the main card container -->
+<style>
+    main, .container {
+        margin-top: 1rem !important;
+        padding-top: 0 !important;
+    }
+</style>
