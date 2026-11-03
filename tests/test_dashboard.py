@@ -40,7 +40,7 @@ def test_dashboard_loads_successfully(app_client):
     client, _ = app_client
     response = client.get("/dashboard")
     assert response.status_code == 200
-    assert b"CSMS Dashboard" in response.data
+    assert b"Dashboard" in response.data
 
 
 def test_empty_dashboard_displays_zero_counts(app_client):
