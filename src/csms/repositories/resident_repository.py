@@ -206,3 +206,22 @@ class ResidentRepository:
 
         # Return True if a row was updated, False if ID was not found
         return rows_affected > 0
+
+    # --- Ticket T14: Aggregate Queries for Dashboard ---
+    def count_all(self) -> int:
+        """Returns total count of all persisted residents using SQLite COUNT(*)."""
+        conn = self._get_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT COUNT(*) FROM residents")
+        count = cursor.fetchone()[0]
+        conn.close()
+        return count
+
+    def count_by_status(self, status: str) -> int:
+        """Returns count of residents with a specific status using SQLite COUNT(*)."""
+        conn = self._get_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT COUNT(*) FROM residents WHERE status = ?", (status,))
+        count = cursor.fetchone()[0]
+        conn.close()
+        return count

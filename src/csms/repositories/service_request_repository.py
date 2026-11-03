@@ -172,3 +172,41 @@ class ServiceRequestRepository:
         conn.close()
 
         return [self._map_row_to_service_request(row) for row in rows]
+
+    # --- Ticket T14: Aggregate Queries for Dashboard ---
+    def count_all(self) -> int:
+        """Returns total count of all persisted service requests using SQLite COUNT(*)."""
+        conn = self._get_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT COUNT(*) FROM service_requests")
+        count = cursor.fetchone()[0]
+        conn.close()
+        return count
+
+    def count_by_status(self, status: str) -> int:
+        """Returns count of service requests with a specific status using SQLite COUNT(*)."""
+        conn = self._get_connection()
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT COUNT(*) FROM service_requests WHERE status = ?", (status,)
+        )
+        count = cursor.fetchone()[0]
+        conn.close()
+        return count
+
+    def find_recent(self, limit: int = 5) -> list[ServiceRequest]:
+        """T14: Retrieves the N most recent service requests ordered by date_requested DESC, id DESC."""
+        conn = self._get_connection()
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            SELECT id, resident_id, service_type, description, date_requested, status
+            FROM service_requests
+            ORDER BY date_requested DESC, id DESC
+            LIMIT ?
+            """,
+            (limit,),
+        )
+        rows = cursor.fetchall()
+        conn.close()
+        return [self._map_row_to_service_request(row) for row in rows]
