@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Resident</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=6">
+</head>
+<body>
+    <main class="container">
+        <section class="card" style="max-width: 600px;">
+            <h1>Register Resident</h1>
+
+            {% if errors %}
+                <div class="alert alert-error">
+                    Please correct the errors below before submitting.
+                </div>
+            {% endif %}
+
+            <form method="POST" action="{{ url_for('main.register_resident_submit') }}" style="display: grid; gap: 1.25rem; margin-top: 1.5rem;">
+                <div>
+                    <label for="first_name" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">First Name</label>
+                    <input type="text" id="first_name" name="first_name" value="{{ form_data.get('first_name', '') }}" 
+                           placeholder="e.g. Juan"
+                           style="width: 100%; padding: 0.6rem; border: 1px solid {% if 'first_name' in errors %}#dc2626{% else %}#d1d5db{% endif %}; border-radius: 0.5rem; outline: none;">
+                    {% if 'first_name' in errors %}
+                        <span style="color: #dc2626; font-size: 0.85rem; margin-top: 0.25rem; display: block; font-weight: 600;">
+                            {% if not form_data.get('first_name') %}First name is required.{% else %}Invalid first name.{% endif %}
+                        </span>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <label for="last_name" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Last Name</label>
+                    <input type="text" id="last_name" name="last_name" value="{{ form_data.get('last_name', '') }}" 
+                           placeholder="e.g. Dela Cruz"
+                           style="width: 100%; padding: 0.6rem; border: 1px solid {% if 'last_name' in errors %}#dc2626{% else %}#d1d5db{% endif %}; border-radius: 0.5rem; outline: none;">
+                    {% if 'last_name' in errors %}
+                        <span style="color: #dc2626; font-size: 0.85rem; margin-top: 0.25rem; display: block; font-weight: 600;">
+                            {% if not form_data.get('last_name') %}Last name is required.{% else %}Invalid last name.{% endif %}
+                        </span>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <label for="address" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Address</label>
+                    <input type="text" id="address" name="address" value="{{ form_data.get('address', '') }}" 
+                           placeholder="e.g. 123 Main St, Zone 1"
+                           style="width: 100%; padding: 0.6rem; border: 1px solid {% if 'address' in errors %}#dc2626{% else %}#d1d5db{% endif %}; border-radius: 0.5rem; outline: none;">
+                    {% if 'address' in errors %}
+                        <span style="color: #dc2626; font-size: 0.85rem; margin-top: 0.25rem; display: block; font-weight: 600;">
+                            {% if not form_data.get('address') %}Address is required.{% else %}Invalid address format.{% endif %}
+                        </span>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <label for="contact_number" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Contact Number</label>
+                    <input type="text" id="contact_number" name="contact_number" value="{{ form_data.get('contact_number', '') }}" 
+                           placeholder="09XXXXXXXXX"
+                           style="width: 100%; padding: 0.6rem; border: 1px solid {% if 'contact_number' in errors %}#dc2626{% else %}#d1d5db{% endif %}; border-radius: 0.5rem; outline: none;">
+                    {% if 'contact_number' in errors %}
+                        <span style="color: #dc2626; font-size: 0.85rem; margin-top: 0.25rem; display: block; font-weight: 600;">
+                            {% if not form_data.get('contact_number') %}Contact number is required.{% else %}Invalid format. Contact number must follow 09XXXXXXXXX.{% endif %}
+                        </span>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <label for="email" style="display: block; font-weight: 600; margin-bottom: 0.25rem;">Email</label>
+                    <input type="text" id="email" name="email" value="{{ form_data.get('email', '') }}" 
+                           placeholder="e.g. juan.delacruz@example.com"
+                           style="width: 100%; padding: 0.6rem; border: 1px solid {% if 'email' in errors %}#dc2626{% else %}#d1d5db{% endif %}; border-radius: 0.5rem; outline: none;">
+                    {% if 'email' in errors %}
+                        <span style="color: #dc2626; font-size: 0.85rem; margin-top: 0.25rem; display: block; font-weight: 600;">
+                            {% if not form_data.get('email') %}Email is required.{% else %}Invalid email format.{% endif %}
+                        </span>
+                    {% endif %}
+                </div>
+
+                <div style="display: flex; gap: 1rem; margin-top: 0.5rem;">
+                    <button type="submit" class="btn btn-warning">Register</button>
+                    <a href="{{ url_for('main.list_residents') }}" class="btn btn-outline">Cancel</a>
+                </div>
+            </form>
+        </section>
+    </main>
+</body>
+</html>
