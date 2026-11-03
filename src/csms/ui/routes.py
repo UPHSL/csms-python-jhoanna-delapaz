@@ -16,6 +16,7 @@ from csms.models.resident import Resident
 from csms.models.service_request import ServiceRequest
 from csms.repositories.resident_repository import ResidentRepository
 from csms.repositories.service_request_repository import ServiceRequestRepository
+from csms.services.dashboard_service import DashboardService
 from csms.services.resident_deactivation_service import ResidentDeactivationService
 from csms.services.resident_query_service import ResidentQueryService
 from csms.services.resident_registration_service import ResidentRegistrationService
@@ -94,18 +95,36 @@ def _get_service_request_status_service() -> ServiceRequestStatusService:
     return ServiceRequestStatusService(service_request_repository=repo)
 
 
+def _get_dashboard_service() -> DashboardService:
+    """Helper function to instantiate DashboardService for T14."""
+    res_repo = _get_repository()
+    sr_repo = _get_service_request_repository()
+    return DashboardService(res_repo, sr_repo)
+
+
 # Routes ---
 
 
 @main_blueprint.get("/")
-def index() -> str:
-    """Display the Sprint 0 welcome page."""
+@main_blueprint.get("/dashboard")
+def dashboard() -> str:
+    """T14: Display the read-only CSMS Operational Summary Dashboard."""
+    dashboard_service = _get_dashboard_service()
+    summary = dashboard_service.get_summary()
+
     return render_template(
         "index.html",
         application_name=current_app.config["APP_NAME"],
         application_version=current_app.config["APP_VERSION"],
         current_sprint=current_app.config["CURRENT_SPRINT"],
+        summary=summary,
     )
+
+
+# Alias main.index so existing templates calling url_for('main.index') do not break
+@main_blueprint.get("/index")
+def index() -> str:
+    return dashboard()
 
 
 @main_blueprint.get("/health")

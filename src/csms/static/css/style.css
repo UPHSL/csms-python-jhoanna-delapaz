@@ -340,3 +340,109 @@ form input[type="text"]:focus {
     background: #fee2e2;
     color: #991b1b;
 }
+
+/* --- T14 Dashboard Compact Layout Additions --- */
+.dashboard-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.dashboard-header {
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-header h1 {
+    margin: 0;
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: #111827;
+}
+
+.dashboard-metrics-row {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 1.25rem;
+}
+
+.dashboard-section-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #4b5563;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+}
+
+.grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+}
+
+.grid-6 {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0.5rem;
+}
+
+.stat-box {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    text-align: center;
+}
+
+.stat-box.highlight {
+    background: #fef08a;
+    border-color: #fde047;
+}
+
+.stat-label-text {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #6b7280;
+    text-transform: uppercase;
+    margin-bottom: 0.15rem;
+    white-space: nowrap;
+}
+
+.stat-box.highlight .stat-label-text {
+    color: #713f12;
+}
+
+.stat-val-text {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #111827;
+    line-height: 1;
+}
+
+.stat-box.highlight .stat-val-text {
+    color: #713f12;
+}
+
+.dashboard-table-container {
+    margin-top: 0.5rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.dashboard-table-container .data-table th {
+    padding: 0.5rem 0.75rem;
+}
+
+.dashboard-table-container .data-table td {
+    padding: 0.5rem 0.75rem;
+}
+
+.empty-state {
+    padding: 1.5rem;
+    text-align: center;
+    color: #6b7280;
+    font-style: italic;
+    font-size: 0.9rem;
+    margin: 0;
+}
