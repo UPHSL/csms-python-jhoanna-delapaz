@@ -7,7 +7,8 @@ class BaseConfig:
     """Settings shared by all application environments."""
 
     APP_NAME = "Community Services Management System"
-    APP_VERSION = "0.1.0"
+    # T16: Authoritative single source of truth for the official CSMS v1.0.0 release version
+    APP_VERSION = "1.0.0"
     CURRENT_SPRINT = "Sprint 0 - Developer Onboarding"
 
     SECRET_KEY = os.environ.get(
