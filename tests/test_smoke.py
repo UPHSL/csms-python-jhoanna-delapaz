@@ -21,7 +21,8 @@ def test_health_endpoint_returns_ok(client: FlaskClient) -> None:
     assert response.status_code == 200
     assert payload is not None
     assert payload["status"] == "ok"
-    assert payload["version"] == "0.1.0"
+    # T16: Updated expected version from starter 0.1.0 to official 1.0.0 release
+    assert payload["version"] == "1.0.0"
 
 
 def test_unknown_page_returns_not_found(client: FlaskClient) -> None:
